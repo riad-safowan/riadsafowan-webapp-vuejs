@@ -1,24 +1,23 @@
 <template>
-  <nav-bar :theme="theme" :themeChanged="changeTheme" :pages="pages" :active-page="activePage"
-    :nav-link-click="(index) => activePage = index">
+  <nav-bar :theme="theme" :isScreenSmall="isScreenSmall" :themeChanged="changeTheme" :pages="pages"
+    :active-page="activePage" :nav-link-click="(index) => activePage = index">
   </nav-bar>
-    <page-viewer v-if="pages.length > 0" :theme="theme" :page="pages[activePage]"></page-viewer>
-
-
-
-
+  <page-viewer v-if="pages.length > 0" :theme="theme" :page="pages[activePage]"></page-viewer>
 </template>
 
 <script>
 import NavBar from './components/NavBar.vue'
 import PageViewer from './components/PageViewer.vue'
 
-
 export default {
   name: 'App',
   components: {
     NavBar,
     PageViewer,
+  },
+  mounted() {
+    this.checkScreenWidth();
+    window.addEventListener('resize', this.checkScreenWidth);
   },
   created() {
     this.getPages()
@@ -28,7 +27,8 @@ export default {
     return {
       activePage: 0,
       pages: [],
-      theme: 'light'
+      theme: 'light',
+      isScreenSmall: false,
     }
   }
   , methods: {
@@ -53,7 +53,13 @@ export default {
       if (theme) {
         this.theme = theme
       }
+    },
+    checkScreenWidth() {
+      this.isScreenSmall = window.innerWidth < 550;
     }
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.checkScreenWidth);
   }
 }
 </script>
