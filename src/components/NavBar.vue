@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar" :style="{
-        backgroundColor: theme === 'dark' ? '#243036' : '#FAFAFA',
+        backgroundColor: theme === 'dark' ? '#081014' : 'white',
         height: 'auto',
         padding: '10px',
         display: 'flex',
@@ -8,7 +8,8 @@
     }">
 
 
-        <div class="name" :style="{
+
+        <h1 class="name" :style="{
             margin: '0',
             marginLeft: isScreenSmall ? '15px' : '30px',
             color: theme === 'dark' ? 'white' : 'black',
@@ -18,7 +19,7 @@
         }">
             <span style="font-weight: 300;">Riad</span>
             <span style="font-weight: 450;">Safowan</span>
-        </div>
+        </h1>
         <div style="flex: 1;"></div>
 
 
@@ -30,7 +31,7 @@
             listStyleType: 'none',
             alignItems: 'center'
         }">
-            <li v-for="(page, index) in pages" @click.prevent="navLinkClick(index)" class="nav-item" :key="index" :style="{
+            <li v-for="(page) in pages" @click.prevent="navLinkClick(page)" class="nav-item" :key="page" :style="{
                 margin: '3px',
                 padding: '5px 0px',
                 display: 'inline-block',
@@ -39,9 +40,9 @@
                 width: '65px',
                 display: 'flex',
                 justifyContent: 'center',
-                fontWeight: activePage == index ? '600' : 'normal'
+                fontWeight: activePage == page ? '600' : 'normal'
             }">
-                {{ page.link.text }}
+                {{ getName(page) }}
             </li>
 
 
@@ -64,10 +65,12 @@
             color: theme === 'dark' ? 'white' : 'black',
             cursor: 'pointer'
         }">menu</i>
-
     </nav>
+
+
+
     <div class="drop-down" v-if="(isScreenSmall)" :style="{
-        backgroundColor: theme === 'dark' ? '#243036' : '#FAFAFA',
+        backgroundColor: theme === 'dark' ? '#081014' : 'white',
         maxHeight: (isScreenSmall && showDropdown) ? '150px' : '0px',
         transition: 'max-height 0.3s'
     }">
@@ -77,7 +80,7 @@
             listStyleType: 'none',
             flexDirection: 'column',
         }">
-            <li v-for="(page, index) in pages" @click.prevent="clickNavLink(index)" class="nav-item" :key="index" :style="{
+            <li v-for="(page) in pages" @click.prevent="clickNavLink(page)" class="nav-item" :key="page" :style="{
                 margin: '0px',
                 padding: '5px 0px',
                 color: theme === 'dark' ? 'white' : 'black',
@@ -85,11 +88,14 @@
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'center',
-                fontWeight: activePage == index ? '600' : 'normal'
+                fontWeight: activePage == page ? '600' : 'normal'
             }">
-                {{ page.link.text }}
+                {{ getName(page) }}
             </li>
-            <button v-if="(showDropdown)" class="toggle-button" @click.prevent="themeChanged()" :style="{
+
+
+
+            <button v-if="(showDropdown)" class="toggle-button" @click.prevent="themeChanged(); toggleDropdown()" :style="{
                 padding: '7px 14px',
                 marginLeft: 'auto',
                 marginRight: '10px',
@@ -129,12 +135,29 @@ export default {
         toggleDropdown() {
             this.showDropdown = !this.showDropdown;
         },
-        clickNavLink(index) {
+        clickNavLink(name) {
             if (this.showDropdown) {
                 this.showDropdown = false
             }
-            this.navLinkClick(index);
+            this.navLinkClick(name);
+        }
+        , getName(page) {
+            let result;
+
+            switch (page) {
+                case 'contact':
+                    result = 'Contact';
+                    break;
+                case 'about':
+                    result = 'About';
+                    break;
+                default:
+                    result = 'Home';
+            }
+
+            return result;
         }
     }
 }
+
 </script>
