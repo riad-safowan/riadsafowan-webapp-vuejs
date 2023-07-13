@@ -1,123 +1,39 @@
 <template>
-    <nav class="navbar" :style="{
-        backgroundColor: theme === 'dark' ? '#081014' : 'white',
-        height: 'auto',
-        padding: '10px',
-        display: 'flex',
-        alignItems: 'center'
-    }">
-
-
-
-        <h1 class="name" :style="{
-            margin: '0',
-            marginLeft: isScreenSmall ? '15px' : '30px',
-            color: theme === 'dark' ? 'white' : 'black',
-            fontSize: isScreenSmall ? '25px' : '30px',
-            transition: 'font-size 0.3s ease',
-            userSelect: 'none'
-        }">
-            <span style="font-weight: 300;">Riad</span>
-            <span style="font-weight: 450;">Safowan</span>
-        </h1>
-        <div style="flex: 1;"></div>
-
-
-
-        <ul v-if="!isScreenSmall" class="menus" :style="{
-            padding: '0',
-            margin: '0',
-            display: 'flex',
-            listStyleType: 'none',
-            alignItems: 'center'
-        }">
-            <li v-for="(page) in pages" @click.prevent="navLinkClick(page)" class="nav-item" :key="page" :style="{
-                margin: '3px',
-                padding: '5px 0px',
-                display: 'inline-block',
-                color: theme === 'dark' ? 'white' : 'black',
-                cursor: 'pointer',
-                width: '65px',
-                display: 'flex',
-                justifyContent: 'center',
-                fontWeight: activePage == page ? '600' : 'normal'
-            }">
-                {{ getName(page) }}
-            </li>
-
-
-
-            <button class="toggle-button" @click.prevent="themeChanged()" :style="{
-                marginLeft: '25px',
-                padding: '7px 14px',
-                borderRadius: '30px',
-                fontSize: '13px',
-                fontWeight: 'bold',
-                backgroundColor: theme === 'dark' ? 'white' : 'black',
-                color: theme === 'dark' ? 'black' : 'white',
-            }">{{ theme === 'dark' ? 'Light' : 'Dark' }}</button>
-        </ul>
-
-
-
-        <i v-if="isScreenSmall" @click.prevent="toggleDropdown()" class="material-icons" :style="{
-            fontSize: '30px',
-            color: theme === 'dark' ? 'white' : 'black',
-            cursor: 'pointer'
-        }">menu</i>
+    <nav class="bg-blue-100 dark:bg-black sm:h-14 md:h-20 lg:h-26 flex flex-col sm:flex-row sm:items-center">
+        <div class="h-14 flex item-center justify-between p-3">
+            <!-- Title-Logo -->
+            <div class="m-0 ml-4 text-black dark:text-white text-2xl transition duration-300 ease-in-out select-none">
+                <span style="font-weight: 300;">Riad</span>
+                <span style="font-weight: 450;">Safowan</span>
+            </div>
+            <!-- Menu-button -->
+            <i v-if="!$grid.sm" @click.prevent="toggleDropdown()"
+                class="material-icons text-black dark:text-white cursor-pointer text-3xl">menu</i>
+        </div>
+        <div v-if="!sm" class="flex-1"></div>
+        <!-- Menus -->
+        <div :class="[!$grid.sm ? (showDropdown) ? 'max-h-44' : 'max-h-0' : '', 'bg-blue-100', 'dark:bg-black']"
+            style="transition: max-height 0.3s;">
+            <ul class="p-0 flex flex-col sm:flex-row sm:items-center list-none py-3 px-3">
+                <!-- Menu Items -->
+                <li v-for="(page) in pages" @click.prevent="clickNavLink(page)" class="nav-item m-0 sm:m-1 py-2 px-0 sm:px-3  w-full flex justify-center text-black dark:text-white
+                    hover:bg-blue-200 dark:hover:bg-gray-600 rounded-md" :key="page" :style="{
+                        fontWeight: activePage == page ? '600' : 'normal'
+                    }">
+                    {{ getName(page) }}
+                </li>
+                <!-- Theme-toggle -->
+                <button
+                    class="toggle-button ml-auto sm:ml-6  mr-0 py-2 px-4 rounded-full text-sm font-bold bg-black dark:bg-white text-white dark:text-black"
+                    @click.prevent="themeChanged()">{{ theme === 'dark' ? 'Light' : 'Dark' }}</button>
+            </ul>
+        </div>
     </nav>
-
-
-
-    <div class="drop-down" v-if="(isScreenSmall)" :style="{
-        backgroundColor: theme === 'dark' ? '#081014' : 'white',
-        maxHeight: (isScreenSmall && showDropdown) ? '150px' : '0px',
-        transition: 'max-height 0.3s'
-    }">
-        <ul class="menus" :style="{
-            padding: '0',
-            display: 'flex',
-            listStyleType: 'none',
-            flexDirection: 'column',
-        }">
-            <li v-for="(page) in pages" @click.prevent="clickNavLink(page)" class="nav-item" :key="page" :style="{
-                margin: '0px',
-                padding: '5px 0px',
-                color: theme === 'dark' ? 'white' : 'black',
-                cursor: 'pointer',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                fontWeight: activePage == page ? '600' : 'normal'
-            }">
-                {{ getName(page) }}
-            </li>
-
-
-
-            <button v-if="(showDropdown)" class="toggle-button" @click.prevent="themeChanged(); toggleDropdown()" :style="{
-                padding: '7px 14px',
-                marginLeft: 'auto',
-                marginRight: '10px',
-                borderRadius: '30px',
-                fontSize: '13px',
-                fontWeight: 'bold',
-                backgroundColor: theme === 'dark' ? 'white' : 'black',
-                color: theme === 'dark' ? 'black' : 'white',
-            }">{{ theme === 'dark' ? 'Light' : 'Dark' }}</button>
-        </ul>
-    </div>
 </template> 
 
-<style scoped>
-.nav-item:hover {
-    background-color: #00000020;
-    border-radius: 5px;
-}
-</Style>
+<style scoped></Style>
 
 <script>
-
 
 export default {
     components: [
@@ -125,10 +41,10 @@ export default {
     created() {
         // this.getThemeSettings()
     },
-    props: ['theme', 'isScreenSmall', 'pages', 'activePage', 'navLinkClick', 'themeChanged'],
+    props: ['pages', 'activePage', 'navLinkClick', 'themeChanged'],
     data() {
         return {
-            showDropdown: false
+            showDropdown: false,
         }
     },
     methods: {

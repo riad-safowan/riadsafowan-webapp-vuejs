@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col">
+   <div :class="[theme, 'h-screen', 'flex', 'flex-col']">
         <nav-bar :theme="theme" :isScreenSmall="isScreenSmall" :themeChanged="changeTheme" :pages="pages"
             :active-page="activePage" :nav-link-click="route">
         </nav-bar>
@@ -11,7 +11,6 @@
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         color: theme === 'dark' ? 'white' : 'black',
-
     }"></router-view>
 
     </div>
